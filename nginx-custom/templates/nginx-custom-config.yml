@@ -1,0 +1,30 @@
+{{- if .Values.nginx.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "nginx-custom.fullname" . }}-nginxconfig
+  labels:
+    app.kubernetes.io/name: {{ include "nginx-custom.name" . }}
+    helm.sh/chart: {{ include "nginx-custom.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+data:
+  nginx.conf: |-
+    user nginx;
+    worker_processes  1;
+    events {
+      worker_connections  10240;
+    }
+    http {
+      server {
+          listen       80;
+          server_name  localhost;
+          location / {
+            root   /usr/share/nginx/html; #Change this line
+            index  index.html index.htm;
+        }
+      }
+    }
+  {{- else }}
+  {{ .Values.nginx.config.custom | indent 4 }}
+  {{- end }}
