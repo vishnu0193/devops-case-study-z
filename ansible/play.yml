@@ -1,0 +1,8 @@
+- name: Install the required Roles
+  hosts: test
+  connection: local
+
+  roles:
+    - role: docker
+    - role: logrotate
+    - role: nginx

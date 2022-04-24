@@ -1,0 +1,16 @@
+---
+
+- name: Install logrotate
+  apt:
+     name: logrotate
+     state: latest
+     update_cache: true
+
+- name: Configure log rotation
+  copy: src=../files/nginx.logrotate
+        dest=/etc/logrotate.d/nginx
+
+- name: restart the nginx
+  systemd:
+    name: nginx
+    state: reloaded
